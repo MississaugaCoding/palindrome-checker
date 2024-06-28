@@ -3,18 +3,22 @@ let myForm = document.getElementById('myForm');
 let inpText = document.getElementById('inpText');
 let txtMsg = document.getElementById('txtMsg');
 
-myForm.addEventListener('submit', submitForm);
+myForm.addEventListener('submit', async (e) => {
+  await submitForm(e);
+});
 
-function submitForm(event) {
+async function submitForm(event) {
   // stop the default behaviour of submitting a form
   // which is to reset the page  
   event.preventDefault();
 
   // call the palindrome checker
   let isPalindrome = palindrome(inpText.value);
-  
-  if(isPalindrome) {
+
+  if (isPalindrome) {
     txtMsg.textContent = "We have a palindrome!!"
+    await savePalindrome(inpText.value);
+    await getPalindromes();
   } else {
     txtMsg.textContent = "Sorry, that is not a palindrome."
   }
@@ -40,4 +44,29 @@ function palindrome(str) {
 
   return rv;
 }  // function palindrome
+
+async function savePalindrome(word) {
+  let resp = await fetch('http://localhost:8000/palindrome', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ word })
+  });
+}
+
+async function getPalindromes() {
+  let resp = await fetch('http://localhost:8000/palindrome');
+  let respJson = await resp.json();
+  console.log(respJson);
+  return respJson;
+}
+
+async function deletePalindromes() {
+  let resp = await fetch('http://localhost:8000/palindrome', {
+    method: "DELETE"
+  });
+  let respJson = await resp.json();
+  console.log(respJson);
+}
 
