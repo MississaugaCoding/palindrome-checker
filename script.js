@@ -2,6 +2,7 @@
 let myForm = document.getElementById('myForm');
 let inpText = document.getElementById('inpText');
 let txtMsg = document.getElementById('txtMsg');
+let divList = document.getElementById('divList');
 
 myForm.addEventListener('submit', async (e) => {
   await submitForm(e);
@@ -18,7 +19,8 @@ async function submitForm(event) {
   if (isPalindrome) {
     txtMsg.textContent = "We have a palindrome!!"
     await savePalindrome(inpText.value);
-    await getPalindromes();
+    let list = await getPalindromes();
+    listPalindromes(list);
   } else {
     txtMsg.textContent = "Sorry, that is not a palindrome."
   }
@@ -60,6 +62,10 @@ async function getPalindromes() {
   let respJson = await resp.json();
   console.log(respJson);
   return respJson;
+}
+
+function listPalindromes(list) {
+  divList.innerHTML = list.map(p => `<p>${p.palindrome}</p>`).join('');
 }
 
 async function deletePalindromes() {
