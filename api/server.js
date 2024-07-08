@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 
 require("dotenv").config(); // load env vars from .env file
@@ -17,7 +16,7 @@ const Palindrome = mongoose.model("Palindrome", PalindromeSchema);
 const app = express();
 
 // middleware to parse incoming JSON data in request body
-app.use(bodyParser.json());
+app.use(express.json());
 
 // cors middleware
 app.use(cors());
